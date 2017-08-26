@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>GFX Stats</title>
+    <style>
+      body{
+        background-color: #fff;
+        font-size: 14px;
+        color: #333;
+      }
+      .invisible{
+        display:none;
+      }
+      label{
+        font-weight: bold;
+        padding: 10px;        
+      }
+    </style>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+  </head>
+  <body>
+    <div id="app">
+      <img id="loadinggif" src="http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/images/loader-large.gif" />
+    </div>
+
+    <script>
+      // install babel hooks in the renderer process
+      require('chart.js');
+      require('./renderer.js');
+    </script>
+
+  </body>
+</html>
