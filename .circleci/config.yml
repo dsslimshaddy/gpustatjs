@@ -8,7 +8,6 @@ jobs:
     <<: *defaults
     steps:
       # Fetch the code
-      - checkout
       - run:
           name: Check versions and env
           command: |
