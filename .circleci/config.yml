@@ -23,4 +23,4 @@ workflows:
   version: 2
   pipeline:
     jobs:
-      - deploy_it:
+      - deploy_it: 
