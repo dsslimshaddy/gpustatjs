@@ -1,7 +1,7 @@
 {
-  "name": "gpustatjs",
+  "name": "gpustatjs-electron",
   "version": "1.0.0",
-  "main": "main.js",
+  "main": "app/main.js",
   "license": "MIT",
   "description": "A GPU Monitor in Electron",
   "author": "dsslimshaddy",
@@ -12,31 +12,21 @@
     "pack": "build --dir",
     "dist": "build",
     "dist-x": "build -ml",
-    "release": "build"    
+    "release": "build"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/dsslimshaddy/gpustatjs.git"
+    "url": "https://github.com/dsslimshaddy/gpustatjs-electron.git"
   },
   "bugs": {
-    "url": "https://github.com/dsslimshaddy/gpustatjs/issues"
+    "url": "https://github.com/dsslimshaddy/gpustatjs-electron/issues"
   },
-  "dependencies": {
-    "babel-register": "^6.26.0",
-    "chart.js": "^2.6.0",
-    "chartkick": "^2.2.4",
-    "devtron": "^1.4.0",
-    "electron-debug": "^1.4.0",
-    "material-ui": "v1.0.0-beta.6",
-    "pondjs": "^0.8.7",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
-    "react-timeseries-charts": "^0.12.8"
-  },
+  "dependencies": {},
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-1": "^6.24.1",
+    "devtron": "^1.4.0",
     "electron-builder": "^19.24.1",
     "electron-prebuilt-compile": "^1.7.5",
     "octonode": "^0.8.0",
