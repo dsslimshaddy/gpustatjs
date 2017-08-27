@@ -36,7 +36,6 @@ deploy:
   - provider: GitHub
     release: gpustatjs$(appveyor_build_version)
     description: 'Release test'
-    provider: GitHub
     auth_token:
       secure: 'ZALACTFVqRb0QmGq0iPbPqQTVncIw/NKwbgp1nBZIzi3j7fWcHFzY3cQNzRI+3zS'
     artifact: /.*\.nupkg/            # upload all NuGet packages to release assets
