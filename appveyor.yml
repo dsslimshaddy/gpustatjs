@@ -34,7 +34,7 @@ deploy:
   description: 'Release test'
   provider: GitHub
   auth_token:
-    secure: ${GH_TOKEN} # your encrypted token from GitHub
+    secure: ZALACTFVqRb0QmGq0iPbPqQTVncIw/NKwbgp1nBZIzi3j7fWcHFzY3cQNzRI+3zS
   artifact: /.*\.nupkg/            # upload all NuGet packages to release assets
   draft: false
   prerelease: true
