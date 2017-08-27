@@ -1,13 +1,54 @@
-machine:
-  node:
-    version: 8.0.0
-dependencies:
-  override:
-    - npm install
-    - npm install rimraf -g
-deployment:
-  release:
-    tag: /v[0-9]+(\.[0-9]+)*/
-    commands:
-      - npm run dist
-      - node ./build/release-to-github.js
+defaults: &defaults
+  working_directory: /tmp/utube
+  docker:
+    - image: circleci/node:8.0.0
+version: 2
+jobs:
+  checkout:
+    <<: *defaults
+    steps:
+      # Fetch the code
+      - checkout
+      - run:
+          name: Check versions and env
+          command: |
+            yarn --version
+            node --version
+            env
+            yarn cache dir
+      - restore_cache:
+          key: yarn-sha-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install js dependencies
+          command: |
+            yarn install --pure-lockfile
+            cd docs && yarn install --pure-lockfile
+      - save_cache:
+          key: yarn-sha-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn/v1
+      - persist_to_workspace:
+          root: /tmp/utube
+          paths:
+            - utube
+  deploy_it:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: /tmp/utube
+      - run:
+          name: Deploy it all
+          command:  |
+            yarn run dist
+            node build/release-to-github.js
+workflows:
+  version: 2
+  pipeline:
+    jobs:
+      - checkout:
+      - deploy_it:
+          requires:
+            - checkout
+          filters:
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
