@@ -1,3 +1,4 @@
 dist
+release-builds
 node_modules
 app/.git
