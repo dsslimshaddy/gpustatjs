@@ -28,3 +28,16 @@ test: off
 branches:
     only:
         - master
+
+deploy:
+  release: gpustatjs$(appveyor_build_version)
+  description: 'Release test'
+  provider: GitHub
+  auth_token:
+    secure: ${GH_TOKEN} # your encrypted token from GitHub
+  artifact: /.*\.nupkg/            # upload all NuGet packages to release assets
+  draft: false
+  prerelease: true
+  on:
+    branch: master                 # release from master branch only
+    appveyor_repo_tag: true        # deploy on tag push only        
