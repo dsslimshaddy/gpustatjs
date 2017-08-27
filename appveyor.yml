@@ -22,7 +22,7 @@ install:
 build_script:
   - node --version
   - npm --version
-  - npm run release
+  - npm run release:windows
 
 test: off
 

@@ -17,7 +17,7 @@ jobs:
           command:  |
             npm install
             npm install electron-builder@next
-            npm run release
+            npm run release:ubuntu
 #            node build/release-to-github.js
 workflows:
   version: 2
