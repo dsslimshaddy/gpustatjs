@@ -12,6 +12,13 @@
     "pack": "build --dir",
     "dist": "build"    
   },
+ "repository": {
+    "type": "git",
+    "url": "https://github.com/dsslimshaddy/gpustatjs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dsslimshaddy/gpustatjs/issues"
+  },  
   "dependencies": {
     "babel-register": "^6.26.0",
     "chart.js": "^2.6.0",

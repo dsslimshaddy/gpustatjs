@@ -12,7 +12,7 @@ const VALUES_SUFFIX = "Values";
 const SECONDS_SUFFIX = "Seconds";
 const INIT_SUFFIX = "init";
 const CHART_SUFFIX = "chart";
-
+const everyXSecond = 5000;
 String.prototype.replaceAll = function(search, replacement) {
   var target = this;
   return target.split(search).join(replacement);
@@ -104,7 +104,7 @@ const gpu_query_columns = [
     'clocks.current.memory'
     */
    ].join(",");
-   const cmd = `nvidia-smi --query-gpu=${gpu_query_columns} --format=csv,noheader,nounits`;
+   const cmd = `nvidia-smi --query-gpu=${gpu_query_columns} --format=csv,noheader`;
 
 const printLabel = (label, val) => (
 		<div>
@@ -144,7 +144,7 @@ export default class Main extends React.Component{
 	    	if(err){
 	    	   throw new Error('nVidia SMI is not available, verify that it is part of your PATH environment variable');
 	    	}else{
-        		setInterval(this.queryGpus, 500);
+        		setInterval(this.queryGpus, everyXSecond);
         		this.queryGpus();
 	    	}
 	    });
@@ -173,47 +173,46 @@ export default class Main extends React.Component{
 	        if(err){
 	 			throw new Error(err);
 	        } else {
-	        	stdout = stdout.trim();
-	        	stdout = stdout.replaceAll("\n",",");
-	        	let props = stdout.split(","),
-	        		  chunk = [];
+	        	console.log(stdout);
+	        	//stdout = stdout + "\n" + stdout + "\n" + stdout; // test case remove in prod , add count below
 
-				while (props.length > 0) {
-				  chunk.push(props.splice(0,11));
-				}
+	        	let chunk = stdout.split("\n");
 				let vals = [];
-				chunk.map(o=>{
-					let power = parseInt(o[7]);
-					if(isNaN(power)) power = -1;
-					const tmp_val = {
-							count: parseInt(o[10]),
-							name: o[2],
-							temp: parseInt(o[3]),
-							memoryUsed: parseInt(o[5]),
-							memoryTotal: parseInt(o[6]),
-							power: power,
-							coreClock: parseInt(o[8]),
-							memoryClock: parseInt(o[9]),
-			        };
-					vals.push(tmp_val);		
-			        chartIndexes.map(o=>{
-			        	if(!o.min || tmp_val[o.index] < o.min){
-			        		o.min = tmp_val[o.index] - o.factor;
-			        		if(o.min < o.minMax) o.min = o.minMax;
-			        	}
-			        	if(!o.max || tmp_val[o.index] > o.max){
-			        		o.max = tmp_val[o.index] + o.factor;
-			        		if(o.max > o.maxMax) o.max = o.maxMax;
-			        		if (o.index == 'memoryUsed') o.max = tmp_val["memoryTotal"];
-			        	}
-			        })
+				chunk.map(ox=>{
+					ox = ox.trim();
+					if(ox.length > 0){
+						let o = ox.split(",");
+						let power = parseInt(o[7]);
+						if(isNaN(power)) power = -1;
+						const tmp_val = {
+								count: parseInt(o[10]),
+								name: o[2],
+								temp: parseInt(o[3]),
+								memoryUsed: parseInt(o[5]),
+								memoryTotal: parseInt(o[6]),
+								power: power,
+								coreClock: parseInt(o[8]),
+								memoryClock: parseInt(o[9]),
+				        };
+						vals.push(tmp_val);		
+				        chartIndexes.map(o=>{
+				        	if(!o.min || tmp_val[o.index] < o.min){
+				        		o.min = tmp_val[o.index] - o.factor;
+				        		if(o.min < o.minMax) o.min = o.minMax;
+				        	}
+				        	if(!o.max || tmp_val[o.index] > o.max){
+				        		o.max = tmp_val[o.index] + o.factor;
+				        		if(o.max > o.maxMax) o.max = o.maxMax;
+				        		if (o.index == 'memoryUsed') o.max = tmp_val["memoryTotal"];
+				        	}
+				        })
+			        }
 				});
 		    this.transformData(vals);
 		  }
 	    });
 	}
 	transformData = (vals) => {
-		
 		const gpus = vals.map(o=>({
 			name: o.name,
 			memoryTotal: o.memoryTotal,
@@ -253,16 +252,15 @@ export default class Main extends React.Component{
 		this[valuesIndexName].forEach((gpu, i) => this[valuesIndexName][i].splice(0, 1))
 		this[valuesIndexName].forEach((gpu, i) => this[valuesIndexName][i].push(val[i][index_name].toFixed(1)))
 
-		this.gpuData = []
-
+		let gpuData = []
 		this[valuesIndexName].forEach((gpu, i) => {
 			let name = val[i].name + ' ' + val[i][index_name].toFixed(1) + suffix;
-			this.gpuData.push({
+			gpuData.push({
 				name: name,
 				data: this[valuesIndexName][i].map((d, i) => [this[secondsIndexName][i], d])
-			})
+			})		
 		})
-		this[index_name + CHART_SUFFIX].updateData(this.gpuData);
+		this[index_name + CHART_SUFFIX].updateData(gpuData);
 
 	}
 	render(){
