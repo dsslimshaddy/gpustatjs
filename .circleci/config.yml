@@ -1,5 +1,5 @@
 defaults: &defaults
-  working_directory: /tmp/utube
+  working_directory: /tmp/gpustatjs
   docker:
     - image: circleci/node:8.0.0
 version: 2
@@ -28,14 +28,14 @@ jobs:
           paths:
             - ~/.cache/yarn/v1
       - persist_to_workspace:
-          root: /tmp/utube
+          root: /tmp/gpustatjs
           paths:
-            - utube
+            - gpustatjs
   deploy_it:
     <<: *defaults
     steps:
       - attach_workspace:
-          at: /tmp/utube
+          at: /tmp/gpustatjs
       - run:
           name: Deploy it all
           command:  |
