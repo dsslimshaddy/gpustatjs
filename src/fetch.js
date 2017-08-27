@@ -104,7 +104,7 @@ const gpu_query_columns = [
     'clocks.current.memory'
     */
    ].join(",");
-   const cmd = `nvidia-smi --query-gpu=${gpu_query_columns} --format=csv,noheader`;
+   const cmd = `nvidia-smi --query-gpu=${gpu_query_columns} --format=csv,noheader,nounits`;
 
 const printLabel = (label, val) => (
 		<div>
@@ -173,7 +173,6 @@ export default class Main extends React.Component{
 	        if(err){
 	 			throw new Error(err);
 	        } else {
-	        	console.log(stdout);
 	        	//stdout = stdout + "\n" + stdout + "\n" + stdout; // test case remove in prod , add count below
 
 	        	let chunk = stdout.split("\n");
@@ -297,14 +296,14 @@ export default class Main extends React.Component{
 							      <Typography type="headline" component="h2">
 							      	{o.name}
 							      </Typography>        						
-							      <Typography type="body1">
+							      <div className="clearfont">
 							      	{printLabel("Memory",o.memoryTotal+"MB")}
-							      </Typography>        						
-							      <Typography>
+							      </div>        						
+							      <div className="clearfont">
 							      	{printLabel("Core Clock Speed",o.coreClock+"Mhz")}
 							      	{printLabel("Memory Clock Speed",o.memoryClock+"Mhz")}
 							      	{(o.power > -1) ? printLabel("Power",o.power+"W") : ""}
-							      </Typography>        						
+							      </div>        						
         						</CardContent>				 			
         					</Card>				 			
 				 			);				 		
