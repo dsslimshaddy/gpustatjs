@@ -10,7 +10,9 @@
     "start": "electron  .",
     "postinstall": "install-app-deps",
     "pack": "build --dir",
-    "dist": "build"
+    "dist": "build",
+    "dist-x": "build -ml",
+    "release": "build"    
   },
   "repository": {
     "type": "git",

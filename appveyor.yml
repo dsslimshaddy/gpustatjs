@@ -15,13 +15,14 @@ install:
   - ps: Install-Product node 8 x64
   - git reset --hard HEAD
   - npm install npm -g
+  - npm install electron-builder@next
   - npm install
   - npm prune
 
 build_script:
   - node --version
   - npm --version
-  - npm run dist
+  - npm run release
 
 test: off
 
@@ -29,18 +30,17 @@ branches:
     only:
         - master
 
-artifacts:
-  - path: '**\*.nupkg'
-
-deploy:
-  - provider: GitHub
-    release: gpustatjs$(appveyor_build_version)
-    description: 'Release test'
-    auth_token:
-      secure: 'ZALACTFVqRb0QmGq0iPbPqQTVncIw/NKwbgp1nBZIzi3j7fWcHFzY3cQNzRI+3zS'
-    artifact: /.*\.nupkg/            # upload all NuGet packages to release assets
-    draft: true
-    prerelease: true
-    on:
-      branch: master                 # release from master branch only
-      appveyor_repo_tag: false        # deploy on tag push only        
+#artifacts:
+#  - path: '**\*.nupkg'
+#deploy:
+#  - provider: GitHub
+#    release: gpustatjs$(appveyor_build_version)
+#    description: 'Release test'
+#    auth_token:
+#      secure: 'ZALACTFVqRb0QmGq0iPbPqQTVncIw/NKwbgp1nBZIzi3j7fWcHFzY3cQNzRI+3zS'
+#    artifact: /.*\.nupkg/            # upload all NuGet packages to release assets
+#    draft: true
+#    prerelease: true
+#    on:
+#      branch: master                 # release from master branch only
+#      appveyor_repo_tag: false        # deploy on tag push only        

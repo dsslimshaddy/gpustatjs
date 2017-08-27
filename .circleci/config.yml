@@ -16,8 +16,9 @@ jobs:
           name: Deploy it all
           command:  |
             npm install
-            npm run dist
-            node build/release-to-github.js
+            npm install electron-builder@next
+            npm run release
+#            node build/release-to-github.js
 workflows:
   version: 2
   pipeline:
