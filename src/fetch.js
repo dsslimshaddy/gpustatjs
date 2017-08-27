@@ -2,9 +2,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { LineChart } from 'chartkick';
-import { Paper, Typography, Icon } from 'material-ui';
+import { FormControlLabel, Switch, TextField, Paper, Typography, Icon } from 'material-ui';
 import Tabs, { Tab } from 'material-ui/Tabs';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
+
+
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import createPalette from 'material-ui/styles/palette';
+
+
+
+
 
 const TEMP_ID = 'TEMP_ID';
 const ID_SUFFIX = 'ID';
@@ -12,11 +20,12 @@ const VALUES_SUFFIX = "Values";
 const SECONDS_SUFFIX = "Seconds";
 const INIT_SUFFIX = "init";
 const CHART_SUFFIX = "chart";
-const everyXSecond = 5000;
 String.prototype.replaceAll = function(search, replacement) {
   var target = this;
   return target.split(search).join(replacement);
 };
+
+
 
 const chartIndexes = [
 {
@@ -130,9 +139,12 @@ export default class Main extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
+			err: false,
 			count: 0,
 			value: 0,
 			gpus: [],
+			everyXSecond: 5,
+			darkTheme: false,
 		}
 	}
 	  handleChange = (event, value) => {
@@ -140,14 +152,22 @@ export default class Main extends React.Component{
 	  };
 
 	componentDidMount(){
+		this.initiateEverything(this.state.everyXSecond);
+	}
+	initiateEverything = (seconds) => {
+		if(!seconds || isNaN( parseInt(seconds) ) ){
+			seconds = 5;
+		}
+		seconds = parseInt(seconds);
+
 	    exec('nvidia-smi', (err, stdout) => {
 	    	if(err){
-	    	   throw new Error('nVidia SMI is not available, verify that it is part of your PATH environment variable');
+	    		this.setState({ err: true });
 	    	}else{
-        		setInterval(this.queryGpus, everyXSecond);
+        		this.handleInterval = setInterval(this.queryGpus, seconds * 1000);
         		this.queryGpus();
 	    	}
-	    });
+	    });		
 	}
 	initializeCharts = ({index_name, seconds, min, max}) => {
 		if(this[index_name+INIT_SUFFIX]) return false;
@@ -171,7 +191,7 @@ export default class Main extends React.Component{
 	queryGpus = () => {
 	    exec(cmd,(err, stdout) => {
 	        if(err){
-	 			throw new Error(err);
+	 			this.err = true;
 	        } else {
 	        	//stdout = stdout + "\n" + stdout + "\n" + stdout; // test case remove in prod , add count below
 
@@ -264,8 +284,26 @@ export default class Main extends React.Component{
 	}
 	render(){
 		const { value } = this.state;
+		const theme = createMuiTheme({
+		  palette: createPalette({
+		    type: (this.state.darkTheme) ? 'dark': 'light',
+		   }),
+		});
+		if(this.state.darkTheme){
+			theme.palette.primary[500] = "#eae9e9";
+		}else{
+			theme.palette.primary[500] = "#3f51b5";
+		}
 
+		if(this.state.err){
+			return (
+				<Typography type="headline" className="error">
+					nvidia-smi is not set in your PATH.
+				</Typography>
+			);
+		}
 		return(
+		  <MuiThemeProvider theme={theme}>
 			<div>
 				<div className="h1">{this.state.name}</div>
 		          <Tabs
@@ -314,7 +352,37 @@ export default class Main extends React.Component{
 						<MakeChart className={(value == i+1) ? '':'invisible'} index_name={o.index} key={i} />
 					)
 				})}
+
+				<Paper style={{padding: '30px',margin: '30px 0'}}>
+			        <TextField
+			          label="Tick Seconds"
+			          defaultValue={this.state.everyXSecond.toString()}
+			          margin="normal"
+			          onKeyUp={(e)=> {
+			          	clearInterval(this.handleInterval);
+			          	this.handleInterval = 0;
+			          	this.initiateEverything(e.target.value);
+			          }}
+			        />
+	  				<FormControlLabel
+	          			control={
+				         <Switch
+				              checked={this.state.darkTheme}
+				              onChange={(event, checked) => {
+				              	this.setState({ darkTheme: checked })
+				              	if(checked){
+				              		document.body.classList.add("DARK_THEME");
+				              	}else{
+				              		document.body.classList.remove("DARK_THEME");
+				              	}
+				              }}
+				            />
+				        }
+				        label="Dark Theme"
+				     />
+				</Paper>
 			</div>
+		 </MuiThemeProvider>
 		);
 	}
 }

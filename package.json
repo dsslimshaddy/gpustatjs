@@ -23,6 +23,8 @@
     "babel-register": "^6.26.0",
     "chart.js": "^2.6.0",
     "chartkick": "^2.2.4",
+    "devtron": "^1.4.0",
+    "electron-debug": "^1.4.0",
     "material-ui": "v1.0.0-beta.6",
     "pondjs": "^0.8.7",
     "react": "^15.6.1",
