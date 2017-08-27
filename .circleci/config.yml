@@ -1,5 +1,4 @@
 defaults: &defaults
-  working_directory: /tmp/gpustatjs
   docker:
     - image: circleci/node:8.0.0
 version: 2
