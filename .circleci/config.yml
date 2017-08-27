@@ -11,6 +11,7 @@ jobs:
   deploy_it:
     <<: *defaults
     steps:
+      - checkout
       - run:
           name: Deploy it all
           command:  |

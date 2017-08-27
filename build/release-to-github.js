@@ -3,7 +3,7 @@ const fs = require( 'fs' );
 const path = require( 'path' );
 
 var client = github.client( process.env.GITHUB_AUTH );
-var ghrepo = client.repo( 'dsslimshaddy/electron-circleci-boilerplate' );
+var ghrepo = client.repo( 'dsslimshaddy/gpustatjs' );
 
 var version = process.env.CIRCLE_TAG;
 ghrepo.release({
