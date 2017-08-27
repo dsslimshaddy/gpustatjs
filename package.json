@@ -6,7 +6,7 @@
   "description": "A GPU Monitor in Electron",
   "author": "dsslimshaddy",
   "scripts": {
-    "clean": "rimraf dist/",
+    "clean": "rimraf dist/ && rimraf release-builds/",
     "clean:app": "rimraf app/bundle/",
     "bablify": "yarn run clean:app && babel app/ --ignore node_modules -d app/bundle/",
     "start": "yarn run bablify && cp app/src/index.html app/bundle/src && electron  .",
@@ -14,13 +14,12 @@
     "pack": "build --dir",
     "dist": "build",
     "dist-x": "build -ml",
-    "release": "yarn run release:linux && yarn run release:windows",
     "x64:linux": "electron-packager . --overwrite --platform=win32 --arch=x64  --icon=build/icon.ico --prune=true --out=release-builds --electron-version=1.7.5",
     "x64-installer:linux": "electron-installer-debian --src release-builds/gpustatjs-electron-linux-x64/ --arch amd64 --dest dist/installers/ --icon build/icon.png",
     "x64:windows": "electron-packager . --overwrite --platform=win32 --arch=x64  --icon=build/icon.ico --prune=true --out=release-builds --electron-version=1.7.5",
     "x64-installer:windows": "electron-installer-windows --src release-builds/gpustatjs-electron-win32-x64/ --dest dist/installers/ --icon build/icon.png",
-    "release:linux": "yarn run x64:linux && yarn run x64-installer:linux",
-    "release:windows": "yarn run x64:windows && yarn run x64-installer:windows"
+    "release:linux": "yarn run clean && yarn run x64:linux && yarn run x64-installer:linux",
+    "release:windows": "yarn run clean && yarn run x64:windows && yarn run x64-installer:windows"
   },
   "repository": {
     "type": "git",
