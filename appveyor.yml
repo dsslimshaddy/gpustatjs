@@ -30,7 +30,7 @@ branches:
         - master
 
 artifacts:
-  - path: /.*\.nupkg/
+  - path: '**\*.nupkg'
 
 deploy:
   - provider: GitHub
