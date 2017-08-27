@@ -5,6 +5,8 @@
   "license": "MIT",
   "description": "A GPU Monitor in Electron",
   "author": "dsslimshaddy",
+  "homepage": "https://github.com/dsslimshaddy/gpustatjs-electron",
+  "keywords": [],
   "scripts": {
     "clean": "rimraf dist/ && rimraf release-builds/",
     "clean:app": "rimraf app/bundle/",
@@ -17,7 +19,8 @@
     "x64:linux": "electron-packager . --overwrite --platform=win32 --arch=x64  --icon=build/icon.ico --prune=true --out=release-builds --electron-version=1.7.5",
     "x64-installer:linux": "electron-installer-debian --src release-builds/gpustatjs-electron-linux-x64/ --arch amd64 --dest dist/installers/ --icon build/icon.png",
     "x64:windows": "electron-packager . --overwrite --platform=win32 --arch=x64  --icon=build/icon.ico --prune=true --out=release-builds --electron-version=1.7.5",
-    "x64-installer:windows": "electron-installer-windows --src release-builds/gpustatjs-electron-win32-x64/ --dest dist/installers/ --icon build/icon.png",
+    "x64-installer:windows": "electron-installer-windows --src release-builds/gpustatjs-electron-win32-x64/ --dest dist/installers/ --icon build/icon.ico",
+
     "release:linux": "yarn run clean && yarn run x64:linux && yarn run x64-installer:linux",
     "release:windows": "yarn run clean && yarn run x64:windows && yarn run x64-installer:windows"
   },
@@ -36,8 +39,6 @@
     "devtron": "^1.4.0",
     "electron": "^1.7.5",
     "electron-builder": "^19.24.1",
-    "electron-installer-debian": "^0.5.2",
-    "electron-installer-windows": "^0.2.0",
     "electron-packager": "^9.0.0",
     "octonode": "^0.8.0",
     "rimraf": "^2.6.1"
